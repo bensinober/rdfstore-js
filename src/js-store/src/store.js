@@ -125,7 +125,7 @@ Store.create = function(){
  *  <li> name: when using persistence, the name for this store. In the MongoDB backed version, name of the DB used by the store. By default <code>'rdfstore_js'</code> is used</li>
  *  <li> overwrite: clears the persistent storage </li>
  *  <li> maxCacheSize: if using persistence, maximum size of the index cache </li>
- *  <li> engine: the persistent storage to use, a value <code>mongodb</code> selects the MongoDB engine</li>
+ *  <li> engine: the persistent storage to use, a value <code>mongodb||tingo</code> selects the MongoDB||TingoDB engine</li>
  *  <li> mongoDomain: when <code>engine=mongodb</code>, server domain name or IP address where the MongoDB server backing the store is running. By default <code>'127.0.0.1'</code> is used</li>
  *  <li> mongoPort: when <code>engine=mongodb</code>, port where the MongoDB server is running. By default <code>27017</code> is used</li>
  *  <li> mongoOptions: when <code>engine=mongodb</code>, additional options for the MongoDB driver. By default <code>{}</code> is used</li>
@@ -155,7 +155,7 @@ Store.Store = function(arg1, arg2) {
 
     var that = this;
     this.customFns = {};
-    if(params['engine']==='mongodb') {
+    if(params['engine']==='mongodb' || params['engine']==='tingodb') {
         this.isMongodb = true;
         this.engine = new MongodbQueryEngine.MongodbQueryEngine(params);
         this.engine.readConfiguration(function(){

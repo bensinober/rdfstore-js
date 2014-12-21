@@ -46,7 +46,7 @@ Some other features included in the library are the following:
 - Custom filter functions
 - Parallel execution where WebWorkers are available
 - Persistent storage using HTML5 LocalStorage in the browser version
-- Persistent storage using MongoDB in the Node.js version
+- Persistent storage using MongoDB or TingoDB in the Node.js version
 - Node.js HTTP server implementating the [SPARQL Protocol for RDF](http://www.w3.org/TR/rdf-sparql-protocol/) recommendation
 
 ## Documentation
@@ -294,7 +294,10 @@ At the moment, webworkers cannot be used with the persistent version of the stor
 
 ###Persistent store creation (Node.js)
 
-The Node.js version of the library uses [MongoDB](http://www.mongodb.org/) as the persistent backend and [Node.js MongoDB driver](https://github.com/christkv/node-mongodb-native) to establish a connection between the store engine and the backend. The options 'persistent' and 'engine' with value 'mongodb' must be passed as parameters. The 'overwrite' parameter can also be used to clean the data stored in the persistent storage. Configuration of the MongoDB instance to be used can be passed using the parameters 'mongoDomain' and 'mongoPort'. Finally the parameter 'mongoOptions' can be used to pass configuration options to the Node.js MongoDB driver (check the driver documentation for more information).
+The Node.js version of the library uses [MongoDB](http://www.mongodb.org/) as the persistent backend and [Node.js MongoDB driver](https://github.com/christkv/node-mongodb-native) to establish a connection between the store engine and the backend. Optionally, the file storage version [TingoDB](https://www.npmjs.com/package/tingodb) can be used, supporting all MongoDB features. The options 'persistent' and 'engine' with value 'mongodb' or 'tingodb' must be passed as parameters. The 'overwrite' parameter can also be used to clean the data stored in the persistent storage. Configuration of the MongoDB instance to be used can be passed using the parameters 'mongoDomain' and 'mongoPort'. Finally the parameter 'mongoOptions' can be used to pass configuration options to the Node.js MongoDB driver (check the driver documentation for more information).
+
+
+#### MongoDB version
 
     new rdfstore.Store({persistent:true, 
                         engine:'mongodb', 
@@ -302,6 +305,18 @@ The Node.js version of the library uses [MongoDB](http://www.mongodb.org/) as th
                         overwrite:true,    // delete all the data already present in the MongoDB server
                         mongoDomain:'dbserver', // location of the MongoDB instance, localhost by default
                         mongoPort:27017 // port where the MongoDB server is running, 27017 by default
+                       }, function(store){
+          ...
+    }
+
+#### TingoDB version
+
+NOTE: the name of the store must be a valid existing folder.
+
+    new rdfstore.Store({persistent:true, 
+                        engine:'tingodb', 
+                        name:'myappstore', // quads in TingoDB will be stored in a DB named myappstore
+                        overwrite:true    // delete all the data already present in the TingoDB server
                        }, function(store){
           ...
     }
