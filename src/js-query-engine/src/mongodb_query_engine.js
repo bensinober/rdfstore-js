@@ -11,9 +11,12 @@ var RDFJSInterface = require("./rdf_js_interface").RDFJSInterface;
 var RDFLoader = require("../../js-communication/src/rdf_loader").RDFLoader;
 var Callbacks = require("./callbacks.js").Callbacks;
 var mongodb = require('mongodb');
-var tingodb = require('tingodb')();
+var localMongoDb = require('tingodb')();
+var assert = require('assert');
+var mkdirp = require('mkdirp');
 
 MongodbQueryEngine.mongodb = true;
+MongodbQueryEngine.localMongoDb = true;
 
 MongodbQueryEngine.MongodbQueryEngine = function(params) {
     params = params || {};
@@ -21,6 +24,8 @@ MongodbQueryEngine.MongodbQueryEngine = function(params) {
     var port = params['mongoPort'] || 27017;
     var mongoOptions = params['mongoOptions'] || {};
     var mongoDBName = params['name'] || 'rdfstore_js';
+
+    this.localStorePath = "/" + mongoDBName;
 
     this.lexicon = this;
     this.backend = this;
@@ -33,7 +38,7 @@ MongodbQueryEngine.MongodbQueryEngine = function(params) {
 
     this.customFns = params.customFns || {};
     if(params['engine'] == "tingodb") {
-    this.client = new tingodb.Db(mongoDBName, {safe:false});
+    this.client = new localMongoDb.Db('./db', {safe:false});
     } else {
     this.client = new mongodb.Db(mongoDBName, new mongodb.Server(server,port,mongoOptions), {safe:false});
     }

@@ -2,9 +2,10 @@
   "devDependencies": {
     "binary": ">=0.3.0",
     "mongodb": ">=0.9.7",
-    "tingodb": ">=0.3.1",
+    "tingodb": "git+https://github.com/JuniperChicago/tingodb.git",
     "nodeunit": ">=0.8.2",
     "put": ">=0.0.6",
-    "n3": "0.3.x"
+    "n3": "0.3.x",
+    "mkdirp": "*"
   }
 }
