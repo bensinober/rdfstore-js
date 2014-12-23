@@ -113,6 +113,7 @@ BUILD_CONFIGURATION = {
       :dependencies => {
         "mongodb"   => ">=0.9.7",
         "tingodb"   => ">=0.3.1",
+        "mkdirp"    => ">=0.5.0",
         "jsdom"     => ">0.8.4",
         "n3"        => ">0.2.1"
       }
