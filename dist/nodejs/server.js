@@ -33,7 +33,7 @@ Server.defaultOptions = {
     "ssl-key": {desc:"Path to the SSL private key file", def:"./ssl/privatekye.pem", validate: function(arg){ return true} },
     "ssl-cert": {desc:"Path to the SSL certfiviate file", def:"./ssl/certificate.pem", validate: function(arg){ return true} },
     "cors-enabled": {desc:"Should the server accept CORS requests", def:"true", validate: function(arg){ return arg==='true' || arg==='false'} },
-    "store-engine": {desc:"What backend should the store use: 'memory' and 'mongodb' are possible values", def:'memory', validate: function(arg){ return arg==='memory' || arg==='mongodb'} },
+    "store-engine": {desc:"What backend should the store use: 'memory', 'mongodb' and 'tingodb' are possible values", def:'memory', validate: function(arg){ return arg==='memory' || arg==='mongodb' || arg ==='tingodb'} },
     "store-tree-order": {desc:"BTree index tree order used in the in memory backend", def:'15', validate:function(arg){ return(arg.match(/^[0-9]+$/) != null) } },
     "store-name": {desc:"Name to be used to store the quad data in the persistent backend", def:'rdfstore_js', validate:function(arg){ return arg.match(/-\./) == null }},
     "store-overwrite": {desc:"If set to 'true' previous data in the persistent storage will be removed at startup", def:'false', validate:function(arg){ return arg==='true' || arg==='false' }},
@@ -168,7 +168,7 @@ Server.startStore = function(options, callback) {
         storeOptions['treeOrder'] == parseInt(options['store-tree-order']);
     } else {
         storeOptions['persistent'] = true;
-        storeOptions['engine'] = 'mongodb';
+        storeOptions['engine'] = options['store-engine'];
 
         if(options['store-overwrite'] == 'true') {
             storeOptions['overwrite'] = true;
