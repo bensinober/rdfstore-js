@@ -10,7 +10,8 @@ var QueryFilters = require("./query_filters").QueryFilters;
 var RDFJSInterface = require("./rdf_js_interface").RDFJSInterface;
 var RDFLoader = require("../../js-communication/src/rdf_loader").RDFLoader;
 var Callbacks = require("./callbacks.js").Callbacks;
-var mongodb = require('mongodb');
+var mongodb = null; // require when needed
+var tingodb = null; // require when needed
 
 MongodbQueryEngine.mongodb = true;
 
@@ -20,6 +21,11 @@ MongodbQueryEngine.MongodbQueryEngine = function(params) {
     var port = params['mongoPort'] || 27017;
     var mongoOptions = params['mongoOptions'] || {};
     var mongoDBName = params['name'] || 'rdfstore_js';
+    
+    // The tingodb files will show up in as db_yourfoldername if not specified
+    var localStorePath = params['localStorePath'] || './';
+
+
 
     this.lexicon = this;
     this.backend = this;
@@ -31,7 +37,16 @@ MongodbQueryEngine.MongodbQueryEngine = function(params) {
     }
 
     this.customFns = params.customFns || {};
-    this.client = new mongodb.Db(mongoDBName, new mongodb.Server(server,port,mongoOptions), {safe:false});
+    
+    if (params['engine'] === "tingodb") {
+        tingodb = require('tingodb')();     
+        this.client = new tingodb.Db(localStorePath, {safe: !overwrite});
+    } else {
+        mongodb = require('mongodb');
+        
+        this.client = new mongodb.Db(mongoDBName, new mongodb.Server(server, port, mongoOptions), {safe: !overwrite});
+    }
+
     this.defaultGraphOid = "u:https://github.com/antoniogarrote/rdfstore-js#default_graph";
     this.defaultGraphUri = "https://github.com/antoniogarrote/rdfstore-js#default_graph";
     this.defaultGraphUriTerm = {"token": "uri", "prefix": null, "suffix": null, "value": this.defaultGraphUri, "oid": this.defaultGraphOid};
