@@ -1,5 +1,6 @@
 #rdfstore-js
 
+antoniogarrote/rdfstore-js + tingodb.
 
 rdfstore-js is a pure Javascript implementation of a RDF graph store with support for the SPARQL query and data manipulation language.
 
